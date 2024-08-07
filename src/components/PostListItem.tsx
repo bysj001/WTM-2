@@ -23,7 +23,7 @@ export default function PostListItem({post}) {
     image.resize(thumbnail().width(width).height(width));
 
     // Apply the transformation.
-    const avatar = cld.image(post.user.avatar_url);
+    const avatar = cld.image(post.user.avatar_url || 'olzd8tda4rzleawvwelr');
     avatar.resize(thumbnail().width(48).height(48));  // Crop the image, focusing on the face.   // Round the corners.
 
 
@@ -35,7 +35,7 @@ export default function PostListItem({post}) {
             />
             
             <Text className="font-semibold"> 
-                    {post.user.username} 
+                    {post.user.username || 'New User'} 
             </Text>
 
             <View className="flex-1">
