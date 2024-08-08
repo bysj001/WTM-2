@@ -53,7 +53,7 @@ export default function CreatePost() {
                     editable
                     multiline
                     maxLength={39}
-                    numberOfLines={1}
+                    numberOfLines={3}
                     onSubmitEditing={Keyboard.dismiss}
                     onChangeText={setCaption}
                     placeholder="What's the move?" 
