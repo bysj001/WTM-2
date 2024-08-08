@@ -5,12 +5,17 @@ import Button from "~/src/components/Button";
 import { supabase } from "~/src/lib/supabase";
 import { useAuth } from "~/src/providers/AuthProvider";
 import CustomTextInput from "~/src/components/CustomTextInput";
+import { cld, uploadImage } from "~/src/lib/cloudinary";
+import { thumbnail } from "@cloudinary/url-gen/actions/resize";
+import { AdvancedImage } from "cloudinary-react-native";
+import { remote } from "@cloudinary/transformation-builder-sdk/actions/customFunction";
 
 export default function ProfileScreen() {
     const [image, setImage] = useState<string | null>(null);
     const [username, setUsername] = useState("");
     const [bio, setBio] = useState("");
     const {user} = useAuth();
+    const [remoteImage, setRemoteImage] = useState<string | null>(null);
 
     useEffect(() => {
         getProfile();
@@ -28,20 +33,43 @@ export default function ProfileScreen() {
         
         setUsername(data.username);
         setBio(data.bio);
+        setRemoteImage(data.avatar_url);
     };
 
     const updateProfile = async () => {
-        if (!user) {
-            return;
+        if (!user) return;
+
+        let avatar_url = null;
+        if (image) {
+            try {
+                const response = await uploadImage(image);
+                avatar_url = response.public_id;
+            } catch (error) {
+                Alert.alert('Failed to upload image');
+                return;
+            }
         }
-        const {data, error} = await supabase.from('profiles').update({
-            id: user.id,
+
+        const updateData = {
             username,
             bio,
-        });
+            avatar_url,
+        };
 
-        if (error){
-            Alert.alert('Failed to update profile')
+        if (avatar_url) {
+            updateData.avatar_url = avatar_url;
+        }
+
+        const { data, error } = await supabase
+            .from('profiles')
+            .update(updateData)
+            .eq('id', user.id);
+
+        if (error) {
+            console.error('Failed to update profile:', error);
+            Alert.alert('Failed to update profile', error.message);
+        } else {
+            Alert.alert('Profile updated successfully');
         }
     };
 
@@ -58,6 +86,14 @@ export default function ProfileScreen() {
             setImage(result.assets[0].uri);
         }
     };
+
+    let remoteCldImage;
+    if (remoteImage){
+        remoteCldImage = cld.image(remoteImage);
+        remoteCldImage.resize(thumbnail().width(300).height(300));
+    }
+    
+    
     return (
         <View className="p-3 flex-1">
             {image ? (
@@ -65,7 +101,7 @@ export default function ProfileScreen() {
                     source={{ uri: image }}
                     className="w-52 aspect-square self-center rounded-full bg-slate-300"
                 />
-            ) : (
+            ) : remoteCldImage ? (<AdvancedImage cldImg={remoteCldImage} className="w-52 aspect-square self-center rounded-full bg-slate-300" />) : (
                 <View className="w-52 aspect-square self-center rounded-full bg-slate-300"/>
             )}
 
