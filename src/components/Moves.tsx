@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { AdvancedImage } from 'cloudinary-react-native';
 import { thumbnail } from "@cloudinary/url-gen/actions/resize";
@@ -12,12 +12,16 @@ const categories = [
     { name: 'Travel 🚘', image: 'cyxobqfr9ncpwfvncqm2.webp' },
     { name: 'Events 🗣️', image: 'mrozzfrgo7vgurvkn75o.jpg' },
     { name: 'Stay in 🏠', image: 'a2or2eibhzeuqgju2c9i.jpg' },
-    { name: 'Movies', image: 'd2ykttnl6yxeekew4e09.avif' },
+    { name: 'Gym 🏋️‍♀️', image: 'ktvf5tllzf85n7flwzcp.jpg' },
+
     // Add more categories as needed
 ];
 
 export default function MovesCards({ onCategorySelect }) {
+    const [selectedCategory, setSelectedCategory] = useState(null);
+
     const handlePress = (category) => {
+        setSelectedCategory(category.name);
         onCategorySelect(category);
     };
 
@@ -27,10 +31,12 @@ export default function MovesCards({ onCategorySelect }) {
                 const image = cld.image(category.image);
                 image.resize(thumbnail().width(200).height(100)); // Adjust size as needed
 
+                const isSelected = selectedCategory === category.name;
+
                 return (
                     <TouchableOpacity
                         key={index}
-                        style={styles.card}
+                        style={[styles.card, isSelected && styles.selectedCard]}
                         onPress={() => handlePress(category)}
                     >
                         <AdvancedImage cldImg={image} style={styles.image} />
@@ -56,6 +62,10 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         elevation: 3,
         backgroundColor: 'white',
+    },
+    selectedCard: {
+        borderColor: 'gray-900',
+        borderWidth: 2,
     },
     image: {
         width: '100%',
