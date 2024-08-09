@@ -95,7 +95,7 @@ export default function ProfileScreen() {
     
     
     return (
-        <View className="p-3 flex-1">
+        <View className="p-3 flex-1 bg-gray-100 dark:bg-gray-900">
             {image ? (
                 <Image
                     source={{ uri: image }}
@@ -115,7 +115,7 @@ export default function ProfileScreen() {
                     placeholder="Username" 
                     value={username} 
                     onChangeText={setUsername}
-                    className="border border-gray-300 p-3 rounded-md"
+                    className="border border-gray-300 p-3 rounded-md "
                 />
 
                 <CustomTextInput 

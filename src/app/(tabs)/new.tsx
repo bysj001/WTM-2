@@ -42,7 +42,7 @@ export default function CreatePost() {
     }
 
     return (
-        <View className="p-3 items-center flex-1"> 
+        <View className="p-3 items-center flex-1 "> 
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Text className="p-3 font-semibold">CATEGORY</Text>
                 <MovesCards onCategorySelect={setSelectedCategory} />

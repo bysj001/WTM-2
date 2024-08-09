@@ -31,6 +31,16 @@ export default function TabsLayout() {
             />
 
             <Tabs.Screen 
+            name='likes' 
+                options={{
+                    headerTitle: 'Likes', 
+                    tabBarIcon: ({ color }) => (
+                        <FontAwesome name="heart-o" size={26} color={color} />
+                    ),
+                }} 
+            />
+
+            <Tabs.Screen 
             name='messages' 
                 options={{
                     headerTitle: 'Messages', 
