@@ -1,4 +1,4 @@
-import { Text, View, Image, TextInput, Alert } from "react-native";
+import { Text, View, Image, TextInput, Alert, ScrollView } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useState } from "react";
 import Button from "~/src/components/Button";
@@ -96,42 +96,47 @@ export default function ProfileScreen() {
     
     return (
         <View className="p-3 flex-1 bg-gray-100 dark:bg-gray-900">
-            {image ? (
-                <Image
-                    source={{ uri: image }}
-                    className="w-52 aspect-square self-center rounded-full bg-slate-300"
-                />
-            ) : remoteCldImage ? (<AdvancedImage cldImg={remoteCldImage} className="w-52 aspect-square self-center rounded-full bg-slate-300" />) : (
-                <View className="w-52 aspect-square self-center rounded-full bg-slate-300"/>
-            )}
 
-            <Text onPress={pickImage} className="text-blue-500 font-semibold m-5 self-center"> 
-                Change
-            </Text>
+            <ScrollView showsVerticalScrollIndicator={false}> 
+                {image ? (
+                    <Image
+                        source={{ uri: image }}
+                        className="w-52 aspect-square self-center rounded-full bg-slate-300"
+                    />
+                ) : remoteCldImage ? (<AdvancedImage cldImg={remoteCldImage} className="w-52 aspect-square self-center rounded-full bg-slate-300" />) : (
+                    <View className="w-52 aspect-square self-center rounded-full bg-slate-300"/>
+                )}
 
-            <View className="gap-4">
-                <CustomTextInput 
-                    label="Username"
-                    placeholder="Username" 
-                    value={username} 
-                    onChangeText={setUsername}
-                    className="border border-gray-300 p-3 rounded-md "
-                />
+                <Text onPress={pickImage} className="text-blue-500 font-semibold m-5 self-center"> 
+                    Change
+                </Text>
 
-                <CustomTextInput 
-                    label="Bio" 
-                    placeholder="Bio" 
-                    value={bio} 
-                    onChangeText={setBio}
-                    multiline
-                    numberOfLines={3}
-                />
-            </View>
+                <View className="gap-4">
+                    <CustomTextInput 
+                        label="Username"
+                        placeholder="Username" 
+                        value={username} 
+                        onChangeText={setUsername}
+                        className="border border-gray-300 p-3 rounded-md "
+                    />
 
-            <View className="gap-2 mt-auto">
-                <Button title="Update Profile" onPress={updateProfile}/>
-                <Button title="Sign Out" onPress={() => supabase.auth.signOut()}/>
-            </View>
+                    <CustomTextInput 
+                        label="Bio" 
+                        placeholder="Bio" 
+                        value={bio} 
+                        onChangeText={setBio}
+                        multiline
+                        numberOfLines={3}
+                    />
+                </View>
+
+                <View className="gap-2 mt-auto">
+                    <Button title="Update Profile" onPress={updateProfile}/>
+                    <Button title="Sign Out" onPress={() => supabase.auth.signOut()}/>
+                </View>
+                
+            </ScrollView>
+            
         </View>
 
         

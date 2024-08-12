@@ -13,7 +13,6 @@ const categories = [
     { name: 'Events 🗣️', image: 'mrozzfrgo7vgurvkn75o.jpg' },
     { name: 'Stay in 🏠', image: 'a2or2eibhzeuqgju2c9i.jpg' },
     { name: 'Gym 🏋️‍♀️', image: 'ktvf5tllzf85n7flwzcp.jpg' },
-
     // Add more categories as needed
 ];
 
@@ -60,11 +59,15 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderRadius: 10,
         overflow: 'hidden',
-        elevation: 3,
         backgroundColor: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 3,
     },
     selectedCard: {
-        borderColor: 'gray-900',
+        borderColor: '#000',
         borderWidth: 2,
     },
     image: {
