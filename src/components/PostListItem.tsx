@@ -6,6 +6,7 @@ import { thumbnail } from '@cloudinary/url-gen/actions/resize';
 import { cld } from '~/src/lib/cloudinary';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../providers/AuthProvider';
+import { sendLikeNotification } from '../utils/notifications';
 
 export default function PostListItem({ post }) {
     const [isLiked, setIsLiked] = useState(false);
@@ -21,37 +22,94 @@ export default function PostListItem({ post }) {
     }, []);
 
     useEffect(() => {
-        if (isLiked) {
+        if (isLiked && !likeRecord) {
             saveLike();
-        } else {
+        } else if (!isLiked && likeRecord) {
             deleteLike();
         }
     }, [isLiked]);
 
     const fetchLike = async () => {
-        const { data } = await supabase.from('likes').select('*').eq('user_id', user?.id).eq('post_id', post.id);
-        if (data && data.length > 0) {
-            setLikeRecord(data[0]);
-            setIsLiked(true);
+        try {
+            const { data, error } = await supabase
+                .from('likes')
+                .select('*')
+                .eq('user_id', user?.id)
+                .eq('post_id', post.id);
+    
+            if (error) {
+                console.error('Error fetching like:', error.message);
+                return;
+            }
+    
+            if (data && data.length > 0) {
+                // console.log('Existing like found:', data[0]);
+                setLikeRecord(data[0]);
+                setIsLiked(true);
+            } else {
+                // console.log('No existing like found');
+                setLikeRecord(null);
+                setIsLiked(false);
+            }
+        } catch (err) {
+            console.error('Unexpected error fetching like:', err);
         }
     };
+    
 
     const saveLike = async () => {
         if (likeRecord) {
+            // console.log('Like already exists:', likeRecord);
             return;
         }
-        const { data } = await supabase.from('likes').insert([{ user_id: user.id, post_id: post.id }]);
-        setLikeRecord(data[0]);
+    
+        try {
+            const { data, error } = await supabase
+                .from('likes')
+                .insert([{ user_id: user.id, post_id: post.id }])
+                .select(); // Ensure data is returned after insert
+    
+            if (error) {
+                console.error('Error inserting like:', error.message);
+                return;
+            }
+    
+            if (data && data.length > 0) {
+                // console.log('Like saved:', data[0]);
+                sendLikeNotification(data[0]);
+                setLikeRecord(data[0]);
+            } else {
+                console.error('No data returned after insert');
+            }
+        } catch (err) {
+            console.error('Unexpected error saving like:', err);
+        }
     };
 
     const deleteLike = async () => {
         if (likeRecord) {
-            const { error } = await supabase.from('likes').delete().eq('id', likeRecord.id);
-            if (!error) {
-                setLikeRecord(null);
+            try {
+                const { error } = await supabase
+                    .from('likes')
+                    .delete()
+                    .eq('id', likeRecord.id); // Ensure you target the correct like record
+    
+                if (error) {
+                    console.error('Error deleting like:', error.message);
+                } else {
+                    // console.log('Like deleted:', likeRecord.id);
+                    setLikeRecord(null);
+                    setIsLiked(false);
+                }
+            } catch (err) {
+                console.error('Unexpected error deleting like:', err);
             }
+        } else {
+            console.warn('No like record found to delete');
         }
     };
+    
+    
 
     const fetchPhotos = async () => {
         const { data } = await supabase
