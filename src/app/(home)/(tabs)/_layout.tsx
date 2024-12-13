@@ -9,8 +9,10 @@ export default function TabsLayout() {
         return <Redirect href="/(auth)"/>;
     }
     
+    
     return (
         <NotificationProvider>
+            
             <Tabs screenOptions={ {tabBarActiveTintColor: 'black', headerStyle: {backgroundColor: '#bef9fa'}, tabBarShowLabel: false}}>
                 <Tabs.Screen
                 name='index' 
@@ -49,7 +51,8 @@ export default function TabsLayout() {
                         tabBarIcon: ({ color }) => (
                             <FontAwesome name="comment" size={26} color={color} />
                         ),
-                    }} 
+                    }}
+
                 />  
 
                 <Tabs.Screen 

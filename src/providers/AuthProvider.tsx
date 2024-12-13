@@ -14,17 +14,20 @@ type Auth = {
   isAuthenticated: boolean;
   session: Session | null;
   user?: User;
+  profile: any | null;
 };
 
 const AuthContext = createContext<Auth>({
   isAuthenticated: false,
   session: null,
+  profile: null,
 });
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useState<Session | null>(null);
   const [isReady, setIsReady] = useState(false);
-
+  const [profile, setProfile] = useState();
+ 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -36,13 +39,31 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     });
   }, []);
 
+  useEffect(() => {
+    if (!session?.user) {
+      setProfile(null);
+      return;
+    }
+
+    const fetchProfile = async () => {
+      let { data, error } = await supabase
+        .from('profiles')
+        .select("*")
+        .eq('id', session.user.id)
+        .single();
+
+      setProfile(data);
+    };
+    fetchProfile();
+  }, [session?.user])
+
   if (!isReady) {
     return <ActivityIndicator />;
   }
 
   return (
     <AuthContext.Provider
-      value={{ session, user: session?.user, isAuthenticated: !!session?.user }}
+      value={{ session, user: session?.user, isAuthenticated: !!session?.user, profile }}
     >
       {children}
     </AuthContext.Provider>

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native
 import { useNavigation } from '@react-navigation/native';
 import { AdvancedImage } from 'cloudinary-react-native';
 import { cld } from '~/src/lib/cloudinary'; // Make sure this path is correct
-import { useAuth } from '../../providers/AuthProvider';
+import { useAuth } from '../../../providers/AuthProvider';
 import { thumbnail } from "@cloudinary/url-gen/actions/resize";
 import { supabase } from "~/src/lib/supabase";
 
