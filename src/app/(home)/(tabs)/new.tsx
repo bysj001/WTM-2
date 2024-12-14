@@ -1,7 +1,6 @@
-import { Text, View, TextInput, ScrollView, Keyboard } from "react-native";
+import { Text, View, TextInput, TouchableOpacity, ScrollView, Keyboard } from "react-native";
 import { useState } from "react";
 import MovesCards from "~/src/components/Moves";
-import Button from "~/src/components/Button";
 import { supabase } from "~/src/lib/supabase";
 import { useAuth } from "~/src/providers/AuthProvider";
 import { router } from 'expo-router';
@@ -60,9 +59,20 @@ export default function CreatePost() {
                     className=" w-full p-10 text-wrap bg-white rounded-md"
                 />
                 
-                <View className="p-3 mt-auto w-full"> 
-                    <Button title="Share" onPress={createPost} />
+                <View className="p-3 mt-auto w-full">
+                    <TouchableOpacity
+                        style={{
+                        backgroundColor: '#00264B',
+                        padding: 10,
+                        borderRadius: 5,
+                        alignItems: 'center',
+                        }}
+                        onPress={createPost}
+                    >
+                        <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Share</Text>
+                    </TouchableOpacity>
                 </View>
+
             </ScrollView>
         </View>
     );

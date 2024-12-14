@@ -4,69 +4,71 @@ import { useAuth } from "~/src/providers/AuthProvider";
 import NotificationProvider from "~/src/providers/NotificationProvider";
 
 export default function TabsLayout() {
-    const {isAuthenticated} = useAuth();
-    if (!isAuthenticated){
-        return <Redirect href="/(auth)"/>;
+    const { isAuthenticated } = useAuth();
+    if (!isAuthenticated) {
+        return <Redirect href="/(auth)" />;
     }
-    
-    
+
     return (
         <NotificationProvider>
-            
-            <Tabs screenOptions={ {tabBarActiveTintColor: 'black', headerStyle: {backgroundColor: '#bef9fa'}, tabBarShowLabel: false}}>
+            <Tabs
+                screenOptions={{
+                    tabBarActiveTintColor: 'black',
+                    tabBarShowLabel: false,
+                    headerStyle: { backgroundColor: '#00264B' },
+                    headerTintColor: 'white', // This sets the title color
+                }}
+            >
                 <Tabs.Screen
-                name='index' 
+                    name='index'
                     options={{
-                        headerTitle: 'WTM',
+                        title: 'WTM',
                         tabBarIcon: ({ color }) => (
                             <FontAwesome name="home" size={26} color={color} />
                         ),
-                    }} 
+                    }}
                 />
 
-                <Tabs.Screen 
-                name='new' 
+                <Tabs.Screen
+                    name='new'
                     options={{
-                        headerTitle: 'Create Move', 
+                        title: 'Create Move',
                         tabBarIcon: ({ color }) => (
                             <FontAwesome name="plus-square-o" size={26} color={color} />
                         ),
-                    }} 
+                    }}
                 />
 
-                <Tabs.Screen 
-                name='likes' 
+                <Tabs.Screen
+                    name='likes'
                     options={{
-                        headerTitle: 'Likes', 
+                        title: 'Likes',
                         tabBarIcon: ({ color }) => (
                             <FontAwesome name="heart-o" size={26} color={color} />
                         ),
-                    }} 
+                    }}
                 />
 
-                <Tabs.Screen 
-                name='messages' 
+                <Tabs.Screen
+                    name='messages'
                     options={{
-                        headerTitle: 'Messages', 
+                        title: 'Messages',
                         tabBarIcon: ({ color }) => (
                             <FontAwesome name="comment" size={26} color={color} />
                         ),
                     }}
+                />
 
-                />  
-
-                <Tabs.Screen 
-                name='profile' 
+                <Tabs.Screen
+                    name='profile'
                     options={{
-                        headerTitle: 'Profile', 
+                        title: 'Profile',
                         tabBarIcon: ({ color }) => (
                             <FontAwesome name="user" size={26} color={color} />
                         ),
-                    }} 
+                    }}
                 />
-
             </Tabs>
         </NotificationProvider>
-        
     );
 }
