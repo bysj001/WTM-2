@@ -43,7 +43,7 @@ export default function LikesScreen() {
 
     const handleMatchPress = (userId) => {
         // Functionality to route to messages tab will be added here
-        navigation.navigate('Messages', { userId });
+        navigation.navigate('messages', { userId });
     };
 
     const renderUserItem = ({ item }) => {

@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import { Alert, StyleSheet, View, AppState, TextInput } from 'react-native'
+import { Alert, StyleSheet, View, AppState } from 'react-native'
 import Button from '~/src/components/Button'
 import { supabase } from '~/src/lib/supabase'
+import { Input } from 'react-native-elements';
+
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -49,22 +51,25 @@ export default function Auth() {
   return (
     <View style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <TextInput
-          onChangeText={(text) => setEmail(text)}
-          value={email}
+        <Input
+          label="Email"
           placeholder="email@address.com"
-          autoCapitalize={'none'}
-          className="border border-gray-300 p-3 rounded-md"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          autoCapitalize="none"
+          leftIcon={{ type: 'font-awesome', name: 'envelope', color: '#888' }}
         />
+
       </View>
       <View style={styles.verticallySpaced}>
-        <TextInput
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
+        <Input
+          label="Password"
           placeholder="Password"
-          autoCapitalize={'none'}
-          className="border border-gray-300 p-3 rounded-md"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+          autoCapitalize="none"
+          secureTextEntry={true}
+          leftIcon={{ type: 'font-awesome', name: 'lock', color: '#888' }}
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
